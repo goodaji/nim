@@ -16,11 +16,12 @@ class Node<T> {
         this.children.add(childNode);
         return childNode;
     }
+
     public T getRood() {
         return root;
     }
 
-    public boolean() {
+    public boolean isRoot() {
         return parent == null;
     }
 

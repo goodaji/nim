@@ -17,6 +17,14 @@ public class Game {
         }
     }
 
+    public int[] getBoard() {
+        return board;
+    }
+
+    public int getPlayerTurn() {
+        return playerTurn;
+    }
+
     public void takeSticks(int pile, int sticks) {
         if (pile < 1 || pile > board.length) {
             System.out.println("Invalid pile");
@@ -27,6 +35,11 @@ public class Game {
             return;
         }
         board[pile - 1] -= sticks;
+        playerTurn = (playerTurn + 1) % 2;
+    }
+
+    public void replaceSticks(int pile, int sticks) {
+        board[pile - 1] += sticks;
         playerTurn = (playerTurn + 1) % 2;
     }
 

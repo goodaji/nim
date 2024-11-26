@@ -7,6 +7,10 @@ public class Main {
     
     Scanner input = new Scanner(System.in);
 
+    Ai cpu = new Ai(0);
+
+    cpu.createSearchTree(nim);
+
     while (nim.gameOver() == false) {
       nim.printPlayerTurn();
       System.out.println("Enter pile and number of sticks");
