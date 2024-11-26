@@ -33,9 +33,11 @@ public class Ai {
                 State currentState = new State(board, 0);
                 Node<State> childNode = node.addChild(currentState);
                 
+                /*
                 System.out.println("Depth " + depth + ": Player " + (playerTurn+1) + " took " + sticks + 
                                     " sticks from pile " + pile + ": " + Arrays.toString(board));
-                
+                */
+               
                 populateSearchTree(nim, childNode, depth+1);
                 nim.replaceSticks(pile, sticks);
             }
