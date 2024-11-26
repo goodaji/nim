@@ -35,12 +35,10 @@ public class Game {
         for (int i : board) {
             sum += i;
         }
-        if (sum == 0) {
+        if (sum == 0) 
             return true;
-        }
-        else {
+        else          
             return false;
-        }
     }
 
     public void printPlayerTurn() {
