@@ -1,6 +1,7 @@
 public class Game {
     private int[] board;
     private int playerTurn;
+    private static int maxTake = 7;
 
     public Game() {
         this.board = new int[] { 1, 3, 4, 5, 6 };
@@ -23,6 +24,10 @@ public class Game {
 
     public int getPlayerTurn() {
         return playerTurn;
+    }
+
+    public int getMaxTake() {
+        return maxTake;
     }
 
     public void takeSticks(int pile, int sticks) {
