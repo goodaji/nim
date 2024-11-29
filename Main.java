@@ -7,8 +7,11 @@ public class Main {
     
     Scanner input = new Scanner(System.in);
 
-    Ai cpu1 = new Ai(0);
-    Ai cpu2 = new Ai(0);
+    System.out.println("Enter CPU difficulty level (1=Hard; 2=Expert)");
+    int difficulty = input.nextInt();
+
+    Ai cpu1 = new Ai(difficulty);
+    Ai cpu2 = new Ai(difficulty);
 
     int[] action = new int[] { 0, 0 };
     int pile;
