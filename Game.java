@@ -40,7 +40,7 @@ public static int[] randomPick(nim.getboard) {
         }
 
         int randomPileIndex = nonEmptyPiles.get(random.nextInt(nonEmptyPiles.size()));
-        int sticksToRemove = random.nextInt(min(maxTake));
+        int sticksToRemove = random.nextInt(Math.min(maxTake, nim.getboard[randomPileIndex])) + 1;
     
         piles[randomPileIndex] -= sticksToRemove;
 
