@@ -223,3 +223,20 @@ public class Ai {
         return xorArr;
     }
 }
+public static int[] randomPick(nim.getboard) {
+        Random random = new Random();
+        List<Integer> nonEmptyPiles = new ArrayList<>();
+    
+        for (int i = 0; i < nim.getboard.length; i++) {
+            if (nim.getboard[i] > 0) {
+                nonEmptyPiles.add(i);
+            }
+        }
+
+        int randomPileIndex = nonEmptyPiles.get(random.nextInt(nonEmptyPiles.size()));
+        int sticksToRemove = random.nextInt(Math.min(maxTake, nim.getboard[randomPileIndex])) + 1;
+    
+        piles[randomPileIndex] -= sticksToRemove;
+
+        return new int[] { randomPileIndex, sticksToRemove }; 
+    }
