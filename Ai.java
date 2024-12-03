@@ -1,37 +1,52 @@
 import java.util.Arrays;
+import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Ai {
     private int difficulty;
-    private final int maxDepth = 2; // must be even for HARD difficulty
+    private final static int maxDepth = 2; // must be even for HARD difficulty
 
     // AI difficulty levels
-    private final int EASY = 0;
-    private final int HARD = 1;
-    private final int EXPERT = 2;
+    private final static int EASY = 1;
+    private final static int HARD = 2;
+    private final static int EXPERT = 3;
 
     public record State(int[] board, int score) {}
 
-
     public Ai(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int[] getMove(Game nim) {
+        switch(difficulty) {
+            case EASY :
+                return randomMove(nim);
+            case HARD :
+                return searchForMove(nim);
+            case EXPERT :
+                return searchForMove(nim);
+        }
+        return new int[] { 0, 0 };
+    }
         
-public static int[] randomPick(nim.getboard) {
+    public int[] randomMove(Game nim) {
+        int[] board = nim.getBoard();
+        int maxTake = nim.getMaxTake();
+
         Random random = new Random();
         List<Integer> nonEmptyPiles = new ArrayList<>();
     
-        for (int i = 0; i < nim.getboard.length; i++) {
-            if (nim.getboard[i] > 0) {
+        for (int i = 0; i < board.length; i++) {
+            if (board[i] > 0) {
                 nonEmptyPiles.add(i);
             }
         }
 
-        int randomPileIndex = nonEmptyPiles.get(random.nextInt(nonEmptyPiles.size()));
-        int sticksToRemove = random.nextInt(Math.min(maxTake, nim.getboard[randomPileIndex])) + 1;
-    
-        piles[randomPileIndex] -= sticksToRemove;
+        int pile = nonEmptyPiles.get(random.nextInt(nonEmptyPiles.size())) + 1;
+        int sticks = random.nextInt(Math.min(maxTake, board[pile-1])) + 1;
 
-        return new int[] { randomPileIndex, sticksToRemove }; 
-    }
+        return new int[] { pile, sticks }; 
     }
 
     public int[] searchForMove(Game nim) {
