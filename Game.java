@@ -29,26 +29,22 @@ public class Game {
     public int getMaxTake() {
         return maxTake;
     }
-public int[] randomPick(nim.getBoard) {
+public static int[] randomPick(nim.getboard) {
         Random random = new Random();
-        
-        for (int i = 0; i < piles.length; i++) {
-            if (piles[i] > 0) {
-                int sticksToRemove;
-                if (piles[i] > 3) {
-                    sticksToRemove = random.nextInt(3) + 1;
-                } else if (piles[i] > 1) {
-                    sticksToRemove = random.nextInt(2) + 1;
-                } else {
-                    sticksToRemove = 1;
-                }
-                
-                piles[i] -= sticksToRemove; 
-                
-                return new int[] { i, sticksToRemove };
+        List<Integer> nonEmptyPiles = new ArrayList<>();
+    
+        for (int i = 0; i < nim.getboard.length; i++) {
+            if (nim.getboard[i] > 0) {
+                nonEmptyPiles.add(i);
             }
         }
-        return new int[] { -1, 0 }; 
+
+        int randomPileIndex = nonEmptyPiles.get(random.nextInt(nonEmptyPiles.size()));
+        int sticksToRemove = random.nextInt(maxTake);
+    
+        piles[randomPileIndex] -= sticksToRemove;
+
+        return new int[] { randomPileIndex, sticksToRemove }; 
     }
     public void takeSticks(int pile, int sticks) {
         if (pile < 1 || pile > board.length) {
