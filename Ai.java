@@ -20,11 +20,12 @@ public class Ai {
 
     public int[] getMove(Game nim) {
         switch(difficulty) {
-            case EASY :
+            case 0:
+            case EASY:
                 return randomMove(nim);
-            case HARD :
+            case HARD:
                 return searchForMove(nim);
-            case EXPERT :
+            case EXPERT:
                 return searchForMove(nim);
         }
         return new int[] { 0, 0 };
@@ -62,7 +63,7 @@ public class Ai {
             valueStar = Integer.MIN_VALUE;
             // iterate through all actions
             for (int pile = 1; pile <= board.length; pile++) {
-                for (int sticks = 1; sticks <= board[pile-1]; sticks++) {
+                for (int sticks = 1; sticks <= Math.min(board[pile-1], nim.getMaxTake()); sticks++) {
                     value = Integer.MIN_VALUE;
                     nim.takeSticks(pile, sticks);
                     value = minValue(nim, Integer.MIN_VALUE, Integer.MAX_VALUE, 1); // initial depth = 1
@@ -79,7 +80,7 @@ public class Ai {
             valueStar = Integer.MAX_VALUE;
             // iterate through all actions
             for (int pile = 1; pile <= board.length; pile++) {
-                for (int sticks = 1; sticks <= board[pile-1]; sticks++) {
+                for (int sticks = 1; sticks <= Math.min(board[pile-1], nim.getMaxTake()); sticks++) {
                     value = Integer.MAX_VALUE;
                     nim.takeSticks(pile, sticks);
                     value = maxValue(nim, Integer.MIN_VALUE, Integer.MAX_VALUE, 1); // initial depth = 1
@@ -110,7 +111,7 @@ public class Ai {
             if (difficulty == EXPERT) {
                 value = expertEval(board, nim.getMaxTake());
             } else {
-                value = hardEval(board);
+                value = hardEval(board, nim.getMaxTake());
             }
             return value;
         }
@@ -119,7 +120,7 @@ public class Ai {
         value = Integer.MIN_VALUE;
 
         for (int i = 1; i <= board.length; i++) {
-            for (int j = 1; j <= board[i-1]; j++) {
+            for (int j = 1; j <= Math.min(board[i-1], nim.getMaxTake()); j++) {
                 nim.takeSticks(i, j);
                 // check max of action evaluation against current best
                 value = Math.max(value, minValue(nim, alpha, beta, depth+1));
@@ -148,7 +149,7 @@ public class Ai {
             if (difficulty == EXPERT) {
                 value = -expertEval(board, nim.getMaxTake());
             } else {
-                value = -hardEval(board);
+                value = -hardEval(board, nim.getMaxTake());
             }
             return value;
         }
@@ -157,7 +158,7 @@ public class Ai {
         value = Integer.MAX_VALUE;
 
         for (int i = 1; i <= board.length; i++) {
-            for (int j = 1; j <= board[i-1]; j++) {
+            for (int j = 1; j <= Math.min(board[i-1], nim.getMaxTake()); j++) {
                 nim.takeSticks(i, j);
                 // check min of action evaluation against current best
                 value = Math.min(value, maxValue(nim, alpha, beta, depth+1));
@@ -173,35 +174,37 @@ public class Ai {
     }
 
     private int expertEval(int[] board, int maxTake) {
-        int endgame = endgameEval(board);
+        int[] moddedBoard = modArray(board, maxTake);
+        int endgame = endgameEval(moddedBoard, maxTake);
         if (endgame != 0) {
             return endgame;
         }
 
-        int xorBoard = xorArray(board);
+        int xorBoard = xorArray(moddedBoard);
 
-        if (xorBoard % (maxTake+1) == 0) {
+        if (xorBoard == 0) {
             return -1;
         } else {
             return 1;
         }
     }
 
-    private int hardEval(int[] board) {
+    private int hardEval(int[] board, int maxTake) {
         // Note: max search depth must be even for this evaluation function to work
-        int endgame = endgameEval(board);
+        int[] moddedBoard = modArray(board, maxTake);
+        int endgame = endgameEval(moddedBoard, maxTake);
         if (endgame != 0) {
             return endgame;
         }
 
         int count;
 
-        for (int i : board) {
+        for (int i : moddedBoard) {
             if (i == 0) {
                 continue;
             }
             count = 0;
-            for (int j : board) {
+            for (int j : moddedBoard) {
                 if (i == j) {
                     count++;
                 }
@@ -213,7 +216,7 @@ public class Ai {
         return -1;
     }
 
-    private int endgameEval(int[] board) {
+    private int endgameEval(int[] board, int maxTake) {
         int sumBoard = sumArray(board);
         int maxBoard = maxArray(board);
 
@@ -225,10 +228,17 @@ public class Ai {
                 return 1;
             }
         }
+        // All piles are empty (modded board)
+        if (sumBoard) == 0 {
+            return 1;
+        }
         // Only 1 pile with any sticks
         for (int i : board) {
             if (i == sumBoard) {
-                return 1;
+                if (i % (maxTake+1) == 0 {
+                    return 1;
+                }
+                return 0;
             }
         }
         return 0;
@@ -254,5 +264,12 @@ public class Ai {
             xorArr = xorArr ^ arr[i];
         }
         return xorArr;
+    }
+
+    private static int[] modArray(int arr[], int mod) {
+        int[] modArr = Arrays.copyOf(arr);
+        for (int i = 0; i < modArr.length; i++) {
+            modArr[i] %= mod + 1;
+        }
     }
 }
