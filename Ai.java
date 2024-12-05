@@ -20,7 +20,7 @@ public class Ai {
 
     public int[] getMove(Game nim) {
         switch(difficulty) {
-            case 0:
+            case 0: // this case shouldn't ever happen
             case EASY:
                 return randomMove(nim);
             case HARD:
@@ -232,15 +232,17 @@ public class Ai {
         if (sumBoard) == 0 {
             return 1;
         }
-        // Only 1 pile with any sticks
+        // Only 1 pile with more than 1 stick
+        int count = 0;
         for (int i : board) {
-            if (i == sumBoard) {
-                if (i % (maxTake+1) == 0 {
-                    return 1;
-                }
-                return 0;
+            if (i > 1) {
+                count++;
             }
         }
+        if (count > 0) {
+            return 1;
+        }
+        // default if all checks fail
         return 0;
     }
 
