@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game {
@@ -6,11 +5,14 @@ public class Game {
     private int playerTurn;
     private static int maxTake = 3;
     private int[] players = new int[] { 0, 0 };
+    private boolean interactive;
 
     private Ai[] cpu = new Ai[2];
 
-    public Game() {
-        this.board = new int[] { 1, 3, 5, 7, 9 };
+    public Game(int[] board, boolean interactive, int[] players) {
+        this.board = board;
+        this.players = players;
+        this.interactive = interactive;
         this.playerTurn = 0;
 
         selectPlayers();
@@ -23,15 +25,17 @@ public class Game {
         for (int i = 0; i < 2; i++) {
             validEntry = false;
             while (!validEntry) {
-                System.out.println("Select player " + (i+1));
-                System.out.println("------------------------");
-                System.out.println("0: Human");
-                System.out.println("1: CPU difficulty easy");
-                System.out.println("2: CPU difficulty hard");
-                System.out.println("3: CPU difficulty expert");
-                players[i] = input.nextInt();
+                if (interactive) {
+                    System.out.println("Select player " + (i+1));
+                    System.out.println("------------------------");
+                    System.out.println("0: Human");
+                    System.out.println("1: CPU difficulty easy");
+                    System.out.println("2: CPU difficulty hard");
+                    System.out.println("3: CPU difficulty expert");
+                    players[i] = input.nextInt();
+                }
                 if (players[i] >= 0 || players[i] <= 3) {
-                    confirmPlayerSelect(i+1, players[i]);
+                    if (interactive) confirmPlayerSelect(i+1, players[i]);
                     this.cpu[i] = new Ai(players[i]); 
                     validEntry = true;
                 } else {
@@ -61,13 +65,17 @@ public class Game {
         }
     }
 
-    public void playGame() {
+    public int playGame() {
         int[] action = new int[] { 0, 0 };
-        System.out.println("Beginning game");
-        System.out.println("--------------");
+        if (interactive) {
+            System.out.println("Beginning game");
+            System.out.println("--------------");
+        }
         while (!gameOver()) {
-            drawBoard();
-            printPlayerTurn();
+            if (interactive) {
+                drawBoard();
+                printPlayerTurn();
+            }
             switch (players[this.playerTurn]) {
                 case 0:
                     action = getHumanMove();
@@ -80,9 +88,10 @@ public class Game {
                     action = cpu[this.playerTurn].searchForMove(this);
                     break;
             }
-            printAction(action[0], action[1]);
+            if (interactive) printAction(action[0], action[1]);
             takeSticks(action[0], action[1]);
         }
+        return (playerTurn + 1); // winner
     }
 
     private int[] getHumanMove() {
@@ -180,7 +189,9 @@ public class Game {
     public void printWinner() {
         int losingPlayer = (playerTurn + 1) % 2;
         int winningPlayer = (playerTurn);
-        System.out.print("Player " + (losingPlayer+1) + getPlayerDesc(players[losingPlayer]) + " took the last stick. ");
-        System.out.println("Player " + (winningPlayer+1) + getPlayerDesc(players[winningPlayer]) + " wins the game!");
+        if (interactive) {
+            System.out.print("Player " + (losingPlayer+1) + getPlayerDesc(players[losingPlayer]) + " took the last stick. ");
+            System.out.println("Player " + (winningPlayer+1) + getPlayerDesc(players[winningPlayer]) + " wins the game!");
+        }
     }
 }
