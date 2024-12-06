@@ -19,6 +19,7 @@ public class Ai {
     }
 
     public int[] getMove(Game nim) {
+        System.out.println("getMove");
         switch(difficulty) {
             case 0: // this case shouldn't ever happen
             case EASY:
@@ -52,6 +53,7 @@ public class Ai {
 
     public int[] searchForMove(Game nim) {
         int[] board  = nim.getBoard();
+        System.out.println("searchForMove");
 
         int pileStar = 0;
         int sticksStar = 0;
@@ -99,6 +101,7 @@ public class Ai {
 
     private int maxValue(Game nim, int alpha, int beta, int depth) {
         int[] board = nim.getBoard();
+        System.out.println(depth);
 
         int value;
 
@@ -108,6 +111,7 @@ public class Ai {
         }
         // max depth test
         if (depth >= maxDepth) {
+            System.out.println("max-- max depth reached");
             if (difficulty == EXPERT) {
                 value = expertEval(board, nim.getMaxTake());
             } else {
@@ -146,6 +150,7 @@ public class Ai {
         }
         // max depth test
         if (depth >= maxDepth) {
+            System.out.println("max depth reached");
             if (difficulty == EXPERT) {
                 value = -expertEval(board, nim.getMaxTake());
             } else {
@@ -190,7 +195,8 @@ public class Ai {
     }
 
     private int hardEval(int[] board, int maxTake) {
-        // Note: max search depth must be even for this evaluation function to work
+        // Note: max search depth must be odd for this evaluation function to work
+        System.out.println("hardEval");
         int[] moddedBoard = modArray(board, maxTake);
         int endgame = endgameEval(moddedBoard, maxTake);
         if (endgame != 0) {
@@ -217,11 +223,13 @@ public class Ai {
     }
 
     private int endgameEval(int[] board, int maxTake) {
+        System.out.println("endgameEval");
         int sumBoard = sumArray(board);
         int maxBoard = maxArray(board);
 
         // All piles have at most 1 stick
         if (maxBoard == 1) {
+            System.out.println("found all piles have at most 1 stick");
             if ((sumBoard % 2) == 1) {
                 return -1;
             } else {
@@ -229,7 +237,7 @@ public class Ai {
             }
         }
         // All piles are empty (modded board)
-        if (sumBoard) == 0 {
+        if (sumBoard == 0) {
             return 1;
         }
         // Only 1 pile with more than 1 stick
@@ -239,7 +247,8 @@ public class Ai {
                 count++;
             }
         }
-        if (count > 0) {
+        if (count > 1) {
+            System.out.println("found only 1 pile with >1 stick");
             return 1;
         }
         // default if all checks fail
@@ -269,9 +278,10 @@ public class Ai {
     }
 
     private static int[] modArray(int arr[], int mod) {
-        int[] modArr = Arrays.copyOf(arr);
+        int[] modArr = Arrays.copyOf(arr, arr.length);
         for (int i = 0; i < modArr.length; i++) {
             modArr[i] %= mod + 1;
         }
+        return modArr;
     }
 }
