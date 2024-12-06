@@ -3,19 +3,31 @@ import java.util.Scanner;
 public class Game {
     private int[] board;
     private int playerTurn;
-    private static int maxTake = 3;
+    private int maxTake;
     private int[] players = new int[] { 0, 0 };
     private boolean interactive;
 
     private Ai[] cpu = new Ai[2];
 
-    public Game(int[] board, boolean interactive, int[] players) {
+    public Game(int[] board, boolean interactive, int[] players, int maxTake) {
         this.board = board;
         this.players = players;
         this.interactive = interactive;
-        this.playerTurn = 0;
+        this.maxTake = maxTake;
 
         selectPlayers();
+    }
+
+    public void updateBoard(int[] board) {
+        this.board = board;
+    }
+
+    public int optimalPlayWinner() {
+        if (cpu[0].expertEval(this.board, this.maxTake) == 1) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     private void selectPlayers() {
@@ -66,6 +78,7 @@ public class Game {
     }
 
     public int playGame() {
+        this.playerTurn = 0;
         int[] action = new int[] { 0, 0 };
         if (interactive) {
             System.out.println("Beginning game");

@@ -173,7 +173,7 @@ public class Ai {
         return value;
     }
 
-    private int expertEval(int[] board, int maxTake) {
+    public int expertEval(int[] board, int maxTake) {
         int[] moddedBoard = modArray(board, maxTake);
         int endgame = endgameEval(moddedBoard, maxTake);
         if (endgame != 0) {
