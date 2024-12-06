@@ -9,7 +9,7 @@ public class Main {
         int maxTake = 5;
 
         Game nim = new Game(startingBoard, interactive, players, maxTake);
-        int winner = nim.playGame();
+        nim.playGame();
         nim.printWinner();
     }
 
