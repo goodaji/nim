@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Ai {
     private int difficulty;
-    private final static int maxDepth = 2; // must be even for HARD difficulty
+    private final static int maxDepth = 3; // must be odd for HARD difficulty
 
     // AI difficulty levels
     private final static int EASY = 1;
@@ -107,7 +107,7 @@ public class Ai {
             return 1;
         }
         // max depth test
-        if (depth > maxDepth) {
+        if (depth >= maxDepth) {
             if (difficulty == EXPERT) {
                 value = expertEval(board, nim.getMaxTake());
             } else {
@@ -145,7 +145,7 @@ public class Ai {
             return -1;
         }
         // max depth test
-        if (depth > maxDepth) {
+        if (depth >= maxDepth) {
             if (difficulty == EXPERT) {
                 value = -expertEval(board, nim.getMaxTake());
             } else {
