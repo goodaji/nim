@@ -6,9 +6,10 @@ public class Main {
         int[] startingBoard = new int[] { 1, 3, 5, 7, 9 };
         int[] players = new int[] { 0, 0 };
         boolean interactive = true;
+        int maxTake = 5;
 
-        Game nim = new Game(startingBoard, interactive, players);
-        nim.playGame();
+        Game nim = new Game(startingBoard, interactive, players, maxTake);
+        int winner = nim.playGame();
         nim.printWinner();
     }
 
