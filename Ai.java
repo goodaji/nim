@@ -12,8 +12,6 @@ public class Ai {
     private final static int HARD = 2;
     private final static int EXPERT = 3;
 
-    public record State(int[] board, int score) {}
-
     public Ai(int difficulty) {
         this.difficulty = difficulty;
     }
